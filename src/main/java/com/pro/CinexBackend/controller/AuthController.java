@@ -1,5 +1,6 @@
 package com.pro.CinexBackend.controller;
 
+import com.pro.CinexBackend.dto.LoginRequest;
 import com.pro.CinexBackend.entity.User;
 import com.pro.CinexBackend.service.AuthService;
 import com.pro.CinexBackend.service.UserService;
@@ -30,6 +31,11 @@ public class AuthController {
         catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest data){
+        return authService.loginUser(data.getEmail(),data.getPassword());
     }
 
 }
