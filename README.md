@@ -109,7 +109,7 @@ It uses **authentication, CRUD operations, role-based permissions, search, filte
 
 ### **Booking**
 - id (PK)
-- eventId (FK → Event.id)
+- movieId (FK → Movie.id)
 - userId (FK → User.id)
 - seats
 - status (CONFIRMED / CANCELLED)
