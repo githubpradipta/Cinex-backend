@@ -35,6 +35,11 @@ public class MovieController {
         return movieService.getMoviesByOrganizer(orgId);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<?> findMoviesBySearch(@RequestParam("q") String query){
+        return movieService.findMoviesBySearchQuery(query);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<?> updateMovieById(@PathVariable UUID id, @RequestBody MovieUpdateRequest data){
         return movieService.updateMovieById(id,data);

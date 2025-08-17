@@ -67,6 +67,8 @@ public class MovieService {
         }
     }
 
+    //searching & filtering
+
     public ResponseEntity<?> getMoviesByCategory(String category){
         try{
             List<Movie> movies = movieRepo.findByCategory(category);
@@ -86,6 +88,16 @@ public class MovieService {
             }
 
             List<Movie> movies = movieRepo.findByOrganizerId(orgId);
+            return ResponseEntity.ok(movies);
+        }
+        catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<?> findMoviesBySearchQuery(String keyword){
+        try {
+            List<Movie> movies = movieRepo.searchMovies(keyword);
             return ResponseEntity.ok(movies);
         }
         catch (RuntimeException e) {

@@ -27,7 +27,7 @@ public class BookingController {
         return bookingService.createBooking(bookingData,userId,movieId);
     }
 
-    @PostMapping("/{bookingId}/cancel")
+    @PatchMapping ("/{bookingId}/cancel")
     public ResponseEntity<?> cancelBooking(@PathVariable UUID bookingId){
         return bookingService.cancelBooking(bookingId);
     }
