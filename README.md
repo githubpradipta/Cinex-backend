@@ -81,6 +81,8 @@ It uses **authentication, CRUD operations, role-based permissions, search, filte
 
 ---
 
+![ERD Diagram](src/main/resources/static/ERD-Diagram.svg)
+
 ## ERD (Entity Relationship Diagram)
 
 ### **User**

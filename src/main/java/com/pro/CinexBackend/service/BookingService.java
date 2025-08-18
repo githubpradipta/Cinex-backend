@@ -37,6 +37,11 @@ public class BookingService {
                 return new ResponseEntity<>(resBody, HttpStatus.BAD_REQUEST);
             }
 
+            if(movie.getAvailableSeats() < bookingData.getSeats()){
+                resBody.put("message","Enough seats are not available");
+                return new ResponseEntity<>(resBody, HttpStatus.CONFLICT);
+            }
+
             //set the userId and movieId as FK;
             bookingData.setUser(user);
             bookingData.setMovie(movie);

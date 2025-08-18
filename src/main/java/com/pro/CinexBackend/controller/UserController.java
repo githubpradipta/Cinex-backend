@@ -15,45 +15,20 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userservice;
     Map<String, String> resbody = new HashMap<>();
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUser(@PathVariable UUID id){
-        try{
-            User user = userservice.getUserById(id);
-            if(user!=null) return ResponseEntity.ok(user);
-            else return new ResponseEntity<>("User Not Found", HttpStatus.NOT_FOUND);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @GetMapping("/")
-    public ResponseEntity<?> getUser(){
-        try{
-            List<User> users = userservice.getAllUsers();
-            return ResponseEntity.ok(users);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<?> getUserById(@PathVariable UUID id){
+        return userservice.getUserById(id);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable UUID id){
-        try{
-            userservice.deleteUserById(id);
-            resbody.put("Message","User Deleted");
-            return ResponseEntity.ok(resbody);
-        }
-        catch (RuntimeException e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return userservice.deleteUserById(id);
 
     }
 

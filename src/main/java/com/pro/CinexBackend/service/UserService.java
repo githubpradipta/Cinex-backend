@@ -20,12 +20,18 @@ public class UserService {
     private final UserRepo repo;
     Map<String, String> resbody = new HashMap<>();
 
-    public User getUserById(UUID id){
+    public ResponseEntity<?> getUserById(UUID id){
         try{
-            return repo.findById(id).orElse(null);
+            User user = repo.findById(id).orElse(null);
+            if(user==null){
+                resbody.put("message","User not found");
+                return new ResponseEntity<>(resbody,HttpStatus.NOT_FOUND);
+            }
+
+            return ResponseEntity.ok(user);
         }
         catch (RuntimeException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.internalServerError().build();
         }
     }
 
@@ -38,21 +44,30 @@ public class UserService {
         }
     }
 
-    public List<User> getAllUsers() {
+    public ResponseEntity<?> getAllUsers() {
         try{
-            return repo.findAll();
+            List<User> users = repo.findAll();
+            return ResponseEntity.ok(users);
         }
         catch (RuntimeException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.internalServerError().build();
         }
     }
 
-    public void deleteUserById(UUID id) {
+    public ResponseEntity<?> deleteUserById(UUID id) {
         try{
+            User user = repo.findById(id).orElse(null);
+            if(user==null){
+                resbody.put("message","user not found");
+                return new ResponseEntity<>(resbody,HttpStatus.NOT_FOUND);
+            }
             repo.deleteById(id);
+
+            resbody.put("message","user deleted");
+            return new ResponseEntity<>(resbody,HttpStatus.OK);
         }
         catch (RuntimeException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.internalServerError().build();
         }
     }
 
@@ -69,11 +84,29 @@ public class UserService {
             if(data.getPassword()!=null) user.setPassword(data.getPassword());
             if(data.getRole()!=null) user.setRole(data.getRole());
 
-            repo.save(user);
+            User updatedUser = repo.save(user);
 
             resbody.clear();
             resbody.put("message","User updated");
-            return ResponseEntity.ok(resbody);
+            return ResponseEntity.ok(updatedUser);
+        }
+        catch (RuntimeException e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    public ResponseEntity<?> changeUserRole(UUID id, String role){
+        try{
+            User user = repo.findById(id).orElse(null);
+            if(user==null){
+                resbody.put("message","user not found");
+                return new ResponseEntity<>(resbody,HttpStatus.NOT_FOUND);
+            }
+            user.setRole(role);
+            repo.save(user);
+
+            resbody.put("message","role changed");
+            return new ResponseEntity<>(resbody,HttpStatus.OK);
         }
         catch (RuntimeException e) {
             return ResponseEntity.internalServerError().build();
