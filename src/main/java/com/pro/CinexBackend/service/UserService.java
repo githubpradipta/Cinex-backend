@@ -3,6 +3,7 @@ package com.pro.CinexBackend.service;
 import com.pro.CinexBackend.dto.UserUpdateRequest;
 import com.pro.CinexBackend.entity.User;
 import com.pro.CinexBackend.repository.UserRepo;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,16 +45,7 @@ public class UserService {
         }
     }
 
-    public ResponseEntity<?> getAllUsers() {
-        try{
-            List<User> users = repo.findAll();
-            return ResponseEntity.ok(users);
-        }
-        catch (RuntimeException e) {
-            return ResponseEntity.internalServerError().build();
-        }
-    }
-
+    @Transactional
     public ResponseEntity<?> deleteUserById(UUID id) {
         try{
             User user = repo.findById(id).orElse(null);
@@ -95,21 +87,5 @@ public class UserService {
         }
     }
 
-    public ResponseEntity<?> changeUserRole(UUID id, String role){
-        try{
-            User user = repo.findById(id).orElse(null);
-            if(user==null){
-                resbody.put("message","user not found");
-                return new ResponseEntity<>(resbody,HttpStatus.NOT_FOUND);
-            }
-            user.setRole(role);
-            repo.save(user);
 
-            resbody.put("message","role changed");
-            return new ResponseEntity<>(resbody,HttpStatus.OK);
-        }
-        catch (RuntimeException e) {
-            return ResponseEntity.internalServerError().build();
-        }
-    }
 }

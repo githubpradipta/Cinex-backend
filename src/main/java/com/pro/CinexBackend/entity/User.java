@@ -1,14 +1,17 @@
 package com.pro.CinexBackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -16,6 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(org.springframework.data.jpa.domain.support.AuditingEntityListener.class)
+
 public class User {
 
     @Id
@@ -29,7 +33,17 @@ public class User {
 
     private String password;
 
-    private String role;
+    private String role = "user";
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @JsonIgnore
+    private List<Booking> bookings = new ArrayList<>();
+
+    @OneToMany(mappedBy = "organizer", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @JsonIgnore
+    private List<Movie> movies = new ArrayList<>();
 
     @CreatedDate
     @Column(updatable = false)

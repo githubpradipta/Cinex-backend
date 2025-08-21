@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/bookings")
+@RequestMapping("/bookings")
 public class BookingController {
 
     private final BookingService bookingService;
@@ -22,8 +22,8 @@ public class BookingController {
         return bookingService.getBookingsbyUserId(userId);
     }
 
-    @PostMapping("/{userId}/{movieId}")
-    public ResponseEntity<?> createBooking(@RequestBody Booking bookingData, @PathVariable UUID userId, @PathVariable UUID movieId){
+    @PostMapping
+    public ResponseEntity<?> createBooking(@RequestBody Booking bookingData, @RequestParam UUID userId, @RequestParam UUID movieId){
         return bookingService.createBooking(bookingData,userId,movieId);
     }
 

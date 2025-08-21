@@ -1,10 +1,9 @@
 package com.pro.CinexBackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -13,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,12 +25,14 @@ public class Booking {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @ToString.Exclude
+    @JsonIgnore
     private Movie movie;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @ToString.Exclude
+    @JsonIgnore
     private User user;
 
     private boolean bookingStatus = true;

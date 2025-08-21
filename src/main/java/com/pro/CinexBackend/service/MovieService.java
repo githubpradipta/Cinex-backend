@@ -5,6 +5,7 @@ import com.pro.CinexBackend.entity.Movie;
 import com.pro.CinexBackend.entity.User;
 import com.pro.CinexBackend.repository.MovieRepo;
 import com.pro.CinexBackend.repository.UserRepo;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -105,6 +106,7 @@ public class MovieService {
         }
     }
 
+    @Transactional
     public ResponseEntity<?> deleteMovieById(UUID id){
         try{
             Movie movie = movieRepo.findById(id).orElse(null);

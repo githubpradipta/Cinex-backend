@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/movie")
+@RequestMapping("/movie")
 public class MovieController {
     private final MovieService movieService;
 

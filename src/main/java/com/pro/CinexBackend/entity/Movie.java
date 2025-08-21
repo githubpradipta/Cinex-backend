@@ -1,8 +1,11 @@
 package com.pro.CinexBackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -11,9 +14,12 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,7 +31,7 @@ public class Movie {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organizer_id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIgnore
     private User organizer;
 
     @Column(unique = true)
@@ -35,7 +41,7 @@ public class Movie {
 
     private String category;
 
-    private String Location;
+    private String location;
 
     private LocalDateTime dateTime;
 
@@ -46,6 +52,9 @@ public class Movie {
     private Integer availableSeats;
 
     private String imgUrl;
+
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Booking> bookings = new ArrayList<>();
 
     @CreatedDate
     @Column(updatable = false)
