@@ -33,7 +33,7 @@ public class User {
 
     private String password;
 
-    private String role = "user";
+    private String role = "ROLE_USER";
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     @ToString.Exclude
