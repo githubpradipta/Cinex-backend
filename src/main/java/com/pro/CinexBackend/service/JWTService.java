@@ -11,7 +11,7 @@ import java.util.Date;
 
 @Service
 public class JWTService {
-    private static final String JWT_SECRET = "sjbsbsdhbhbBHDBHbhhf_93r932rnen_JSBFBJfd84r9enfn";
+    private static final String JWT_SECRET = "YOUR_KEY";
     private static final Key SECRET_KEY = Keys.hmacShaKeyFor(JWT_SECRET.getBytes());
 
     private Claims extractClaims(String token){
