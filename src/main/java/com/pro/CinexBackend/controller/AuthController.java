@@ -1,6 +1,6 @@
 package com.pro.CinexBackend.controller;
 
-import com.pro.CinexBackend.dto.LoginRequest;
+import com.pro.CinexBackend.dots.LoginRequest;
 import com.pro.CinexBackend.entity.User;
 import com.pro.CinexBackend.service.AuthService;
 import com.pro.CinexBackend.service.UserService;

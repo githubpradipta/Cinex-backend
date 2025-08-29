@@ -1,12 +1,16 @@
 package com.pro.CinexBackend.service;
 
-import com.pro.CinexBackend.dto.MovieUpdateRequest;
+import com.pro.CinexBackend.dots.MovieDTOs.MovieDTO;
+import com.pro.CinexBackend.dots.MovieDTOs.MovieResponse;
+import com.pro.CinexBackend.dots.MovieDTOs.MovieUpdateRequest;
+import com.pro.CinexBackend.dots.OrganizerDTOs.OrganizerDTO;
 import com.pro.CinexBackend.entity.Movie;
 import com.pro.CinexBackend.entity.User;
 import com.pro.CinexBackend.repository.MovieRepo;
 import com.pro.CinexBackend.repository.UserRepo;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,6 +26,7 @@ public class MovieService {
 
     private final MovieRepo movieRepo;
     private final UserRepo userRepo;
+    private final ModelMapper modelMapper;
     Map<String,String> resBody = new HashMap<>();
 
     public ResponseEntity<?> AddMovie(UUID organizerId, Movie movie){
@@ -38,7 +43,7 @@ public class MovieService {
             Movie checkMovie = movieRepo.findByTitle(movie.getTitle());
             if(checkMovie!=null){
                 resBody.put("message","Title already exists");
-                return new ResponseEntity<>(resBody, HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(resBody, HttpStatus.CONFLICT);
             }
 
             movie.setOrganizer(organizer);
@@ -60,8 +65,13 @@ public class MovieService {
                 resBody.put("message","Movie not found");
                 return new ResponseEntity<>(resBody,HttpStatus.NOT_FOUND);
             }
-
-            return ResponseEntity.ok(movie);
+            //DTO conversions
+            MovieResponse movieRes =  modelMapper.map(movie,MovieResponse.class);
+            if(movie.getOrganizer()!=null){
+                OrganizerDTO organizer = modelMapper.map(movie.getOrganizer(),OrganizerDTO.class);
+                movieRes.setOrganizer(organizer);
+            }
+            return ResponseEntity.ok(movieRes);
         }
         catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
@@ -72,7 +82,7 @@ public class MovieService {
 
     public ResponseEntity<?> getMoviesByCategory(String category){
         try{
-            List<Movie> movies = movieRepo.findByCategory(category);
+            List<Movie> movies = movieRepo.findByCategoryIgnoreCase(category);
             return ResponseEntity.ok(movies);
         }
         catch (RuntimeException e) {

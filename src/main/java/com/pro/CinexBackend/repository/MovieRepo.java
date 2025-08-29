@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface MovieRepo extends JpaRepository<Movie, UUID> {
-    List<Movie> findByCategory(String category);
+    List<Movie> findByCategoryIgnoreCase(String category);
 
     List<Movie> findByOrganizerId(UUID orgId);
 

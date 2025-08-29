@@ -45,4 +45,8 @@ public class Booking {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    public boolean getBookingStatus() {
+        return this.bookingStatus;
+    }
 }

@@ -71,6 +71,12 @@ public class BookingService {
                 return new ResponseEntity<>(resBody,HttpStatus.NOT_FOUND);
             }
 
+            if(!booking.getBookingStatus()){
+                return new ResponseEntity<>(Map.of(
+                        "message","Booking already canceled"
+                ),HttpStatus.CONFLICT);
+            }
+
             //re-update the movie schema by adding the canceled seats
             Movie movie = booking.getMovie();
             movie.setAvailableSeats(movie.getAvailableSeats()+booking.getSeats());

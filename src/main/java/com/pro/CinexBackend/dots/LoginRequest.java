@@ -1,6 +1,5 @@
-package com.pro.CinexBackend.dto;
+package com.pro.CinexBackend.dots;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,9 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserUpdateRequest {
-    private String name;
+public class LoginRequest {
     private String email;
     private String password;
-    private String role;
 }

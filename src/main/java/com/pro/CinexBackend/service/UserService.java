@@ -1,10 +1,13 @@
 package com.pro.CinexBackend.service;
 
-import com.pro.CinexBackend.dto.UserUpdateRequest;
+import com.pro.CinexBackend.dots.BookingDTOs.BookingDTO;
+import com.pro.CinexBackend.dots.UserDTOs.UserResponse;
+import com.pro.CinexBackend.dots.UserUpdateRequest;
 import com.pro.CinexBackend.entity.User;
 import com.pro.CinexBackend.repository.UserRepo;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,12 +16,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepo repo;
+    private final ModelMapper modelMapper;
+
     Map<String, String> resbody = new HashMap<>();
 
     public ResponseEntity<?> getUserById(UUID id){
@@ -29,7 +35,21 @@ public class UserService {
                 return new ResponseEntity<>(resbody,HttpStatus.NOT_FOUND);
             }
 
-            return ResponseEntity.ok(user);
+            //DTO conversion
+            UserResponse userRes = modelMapper.map(user,UserResponse.class);
+            if(user.getBookings().size()!=0){
+                List<BookingDTO> bookingDTOs = user.getBookings().stream()
+                        .map(booking -> {
+                            BookingDTO dto = modelMapper.map(booking, BookingDTO.class);
+                            dto.setMovieName(booking.getMovie().getTitle());
+                            return dto;
+
+                        })
+                        .collect(Collectors.toList());
+                userRes.setBookings(bookingDTOs);
+            }
+
+            return ResponseEntity.ok(userRes);
         }
         catch (RuntimeException e) {
             return ResponseEntity.internalServerError().build();
